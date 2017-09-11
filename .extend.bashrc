@@ -36,6 +36,9 @@ declare -A config=(
     [psColor256]=118    # Color number: 0-255
     [psColor16]=10      # Color number: 0-15
     [psColor8]=2        # Color number: 0-7
+
+    # Favorite text editor
+    [editor]='vim'    # Executable name (e.g. 'vim')
 )
 
 # Prompt can be changed at any time by calling the function 'setPrompt' with an
@@ -50,6 +53,10 @@ declare -A config=(
 
 
 # ------------------------------------------------------------------------------
+
+
+# Temporary auxiliary variable
+declare -A temp
 
 
 # --- Terminal -----------------------------------------------------------------
@@ -170,6 +177,16 @@ printNl () {
 setPrompt ${config[psType]}
 
 
+# --- Favorite text editor ---
+
+temp[editor]=$(which ${config[editor]} 2>/dev/null)
+
+if [[ -f "${temp[editor]}" ]]; then
+    export EDITOR=${temp[editor]}
+    export VISUAL=${temp[editor]}
+fi
+
+
 # --- Aliases ------------------------------------------------------------------
 
 alias lsc='ls --color'
@@ -178,4 +195,4 @@ alias lsa='lsc -lAh'
 
 # --- Cleanup ------------------------------------------------------------------
 
-unset config
+unset config temp
